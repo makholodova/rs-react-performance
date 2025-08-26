@@ -1,0 +1,40 @@
+﻿.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 0.5rem;
+  font-size: 14px;
+  background-color: var(--white);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.head {
+  background-color: #f5f5f5;
+  color: var(--dark);
+}
+
+.head th {
+  padding: 10px;
+  text-align: left;
+  font-weight: 600;
+  border-bottom: 2px solid #ddd;
+}
+
+.body tr {
+  transition: background-color 0.2s ease;
+}
+
+.body tr:nth-child(even) {
+  background-color: #fafafa;
+}
+
+.body tr:hover {
+  background-color: #f0f0f0;
+}
+
+.body td {
+  padding: 8px 10px;
+  border-bottom: 1px solid #eee;
+  text-align: left;
+}

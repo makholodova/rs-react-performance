@@ -1,10 +1,11 @@
-﻿/*import styles from './app-core.module.css';*/
+﻿import styles from './app-core.module.css';
 import { getCo2Resource } from '../../service/co2.service.ts';
 import { CountryList } from '../country-list/country-list.tsx';
 import type { CountryData } from '../../types/country.type.ts';
 import Modal from '../modal/modal.tsx';
 import { useState } from 'react';
 import { DEFAULT_COLS } from '../../const.ts';
+import { Controls } from '../controls/controls.tsx';
 
 export default function AppCore() {
   const [modalOpen, setModalOpen] = useState(false);
@@ -17,8 +18,6 @@ export default function AppCore() {
       series,
     })
   );
-
-  console.log('data', data);
 
   const s = new Set<string>();
   for (const c of Object.values(data)) {
@@ -36,13 +35,10 @@ export default function AppCore() {
     DEFAULT_COLS.filter((k) => availableFields.includes(k))
   );
 
-  console.log('selectedColumns', selectedColumns);
-
   return (
-    <div>
-      <button className="primary" onClick={() => setModalOpen(true)}>
-        Выбрать колонки…
-      </button>
+    <main className={styles.main}>
+      <Controls onOpenModal={() => setModalOpen(true)} />
+
       <CountryList countries={countries} selectedColumns={selectedColumns} />
 
       {modalOpen && (
@@ -53,6 +49,6 @@ export default function AppCore() {
           onClose={() => setModalOpen(false)}
         />
       )}
-    </div>
+    </main>
   );
 }

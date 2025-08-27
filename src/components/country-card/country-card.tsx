@@ -16,7 +16,7 @@ export function CountryCard({ country, selectedColumns }: CountryCardProps) {
     ...data.map((r) => Number(r.year)).filter(Number.isFinite)
   );
   const row = data.find((r) => Number(r.year) === latestYear);
-  const population = row?.population?.toString() ?? 'N/A';
+  const population = row?.population?.toLocaleString('ru-RU') ?? 'N/A';
 
   const columns = ['year', ...selectedColumns];
 

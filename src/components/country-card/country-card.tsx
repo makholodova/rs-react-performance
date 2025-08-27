@@ -6,16 +6,19 @@ import DataTable from '../data-table/data-table.tsx';
 export type CountryCardProps = {
   country: CountryData;
   selectedColumns: string[];
+  year: number;
 };
 
-export function CountryCard({ country, selectedColumns }: CountryCardProps) {
+export function CountryCard({
+  country,
+  selectedColumns,
+  year,
+}: CountryCardProps) {
   const [expanded, setExpanded] = useState(false);
 
   const data = country.series.data ?? [];
-  const latestYear = Math.max(
-    ...data.map((r) => Number(r.year)).filter(Number.isFinite)
-  );
-  const row = data.find((r) => Number(r.year) === latestYear);
+
+  const row = data.find((r) => Number(r.year) === year);
   const population = row?.population?.toLocaleString('ru-RU') ?? 'N/A';
 
   const columns = ['year', ...selectedColumns];

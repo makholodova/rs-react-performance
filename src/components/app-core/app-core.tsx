@@ -35,11 +35,42 @@ export default function AppCore() {
     DEFAULT_COLS.filter((k) => availableFields.includes(k))
   );
 
+  //Years
+  const set = new Set<number>();
+  for (const c of Object.values(data)) {
+    for (const row of c.data ?? [])
+      if (typeof row.year === 'number') set.add(row.year);
+  }
+
+  const allYears = Array.from(set).sort((a, b) => a - b);
+
+  const [year, setYear] = useState<number>(() => allYears[allYears.length - 1]);
+  const handleYearChange = (year: number) => setYear(year);
+
+  //Country
+  const [country, setCountry] = useState('');
+
+  const q = country.trim().toLowerCase();
+  const visibleCountries = q
+    ? countries.filter((c) => c.name.toLowerCase().includes(q))
+    : countries;
+
   return (
     <main className={styles.main}>
-      <Controls onOpenModal={() => setModalOpen(true)} />
+      <Controls
+        year={year}
+        years={allYears}
+        onYearChange={handleYearChange}
+        country={country}
+        onCountryChange={setCountry}
+        onOpenModal={() => setModalOpen(true)}
+      />
 
-      <CountryList countries={countries} selectedColumns={selectedColumns} />
+      <CountryList
+        year={year}
+        countries={visibleCountries}
+        selectedColumns={selectedColumns}
+      />
 
       {modalOpen && (
         <Modal

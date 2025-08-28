@@ -1,27 +1,30 @@
 ﻿import styles from './country-card.module.css';
 import type { CountryData } from '../../types/country.type.ts';
-import { useCallback, useState } from 'react';
-import DataTable from '../data-table/data-table.tsx';
+import React, { useCallback, useMemo, useState } from 'react';
+import { DataTable } from '../data-table/data-table.tsx';
 
 export type CountryCardProps = {
   country: CountryData;
-  selectedColumns: string[];
+  columns: string[];
   year: number;
 };
 
-export function CountryCard({
+export const CountryCard = React.memo(function CountryCard({
   country,
-  selectedColumns,
+  columns,
   year,
 }: CountryCardProps) {
   const [expanded, setExpanded] = useState(false);
 
-  const data = country.series.data ?? [];
+  const row = useMemo(() => {
+    const data = country.series.data ?? [];
+    return data.find((r) => Number(r.year) === year);
+  }, [country.series.data, year]);
 
-  const row = data.find((r) => Number(r.year) === year);
-  const population = row?.population?.toLocaleString('ru-RU') ?? 'N/A';
-
-  const columns = ['year', ...selectedColumns];
+  const population = useMemo(
+    () => row?.population?.toLocaleString('ru-RU') ?? 'N/A',
+    [row]
+  );
 
   const handleClick = useCallback(() => setExpanded((p) => !p), []);
 
@@ -43,4 +46,4 @@ export function CountryCard({
       {expanded && <DataTable columns={columns} row={row ?? {}} />}
     </div>
   );
-}
+});

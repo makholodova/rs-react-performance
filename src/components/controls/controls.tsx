@@ -1,5 +1,6 @@
 ﻿import styles from './controls.module.css';
 import type { SortKey } from '../../types/country.type.ts';
+import React from 'react';
 
 type ControlsProps = {
   year: number;
@@ -14,8 +15,7 @@ type ControlsProps = {
 
   onOpenModal: () => void;
 };
-
-export function Controls({
+export const Controls = React.memo(function Controls({
   onOpenModal,
   year,
   years,
@@ -71,4 +71,4 @@ export function Controls({
       </button>
     </div>
   );
-}
+});

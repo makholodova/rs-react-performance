@@ -1,11 +1,14 @@
-﻿import styles from './data-table.module.css';
+﻿import React from 'react';
+import styles from './data-table.module.css';
 
 export type DataTableProps = {
   columns: string[];
   row: Record<string, unknown>;
 };
-
-export default function DataTable({ columns, row }: DataTableProps) {
+export const DataTable = React.memo(function DataTable({
+  columns,
+  row,
+}: DataTableProps) {
   return (
     <table className={styles.table}>
       <thead className={styles.head}>
@@ -22,4 +25,4 @@ export default function DataTable({ columns, row }: DataTableProps) {
       </tbody>
     </table>
   );
-}
+});

@@ -1,16 +1,17 @@
-﻿import styles from './country-list.module.css';
+﻿import React from 'react';
+import styles from './country-list.module.css';
 import { CountryCard } from '../country-card/country-card.tsx';
 import type { CountryData } from '../../types/country.type.ts';
 
 export type CountryListProps = {
   countries: CountryData[];
-  selectedColumns: string[];
+  columns: string[];
   year: number;
 };
 
-export function CountryList({
+export const CountryList = React.memo(function CountryList({
   countries,
-  selectedColumns,
+  columns,
   year,
 }: CountryListProps) {
   if (!countries.length)
@@ -21,11 +22,11 @@ export function CountryList({
       {countries.map((country) => (
         <CountryCard
           year={year}
-          selectedColumns={selectedColumns}
+          columns={columns}
           key={country.name}
           country={country}
         />
       ))}
     </div>
   );
-}
+});

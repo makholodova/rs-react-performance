@@ -1,4 +1,5 @@
 ﻿import styles from './controls.module.css';
+import type { SortKey } from '../../types/country.type.ts';
 
 type ControlsProps = {
   year: number;
@@ -7,6 +8,9 @@ type ControlsProps = {
 
   country: string;
   onCountryChange: (country: string) => void;
+
+  sort: SortKey;
+  onSortChange: (sort: SortKey) => void;
 
   onOpenModal: () => void;
 };
@@ -18,6 +22,8 @@ export function Controls({
   onYearChange,
   country,
   onCountryChange,
+  sort,
+  onSortChange,
 }: ControlsProps) {
   return (
     <div className={styles.controls}>
@@ -48,11 +54,15 @@ export function Controls({
 
       <label className={styles.label}>
         <span>Sort by</span>
-        <select className={styles.select}>
-          <option value="population-desc">Population ↓ </option>
-          <option value="population-asc">Population ↑ </option>
-          <option value="population-asc">Name A→Z </option>
-          <option value="population-desc">Name Z→A </option>
+        <select
+          value={sort}
+          onChange={(e) => onSortChange(e.target.value as SortKey)}
+          className={styles.select}
+        >
+          <option value={'population-desc'}>Population ↓ </option>
+          <option value={'population-asc'}>Population ↑ </option>
+          <option value={'name-asc'}>Name A→Z </option>
+          <option value={'name-desc'}>Name Z→A </option>
         </select>
       </label>
 

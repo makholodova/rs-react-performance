@@ -14,3 +14,9 @@ export type YearData = {
   co2?: number;
   co2_per_capita?: number;
 };
+
+export type SortKey =
+  | 'population-desc'
+  | 'population-asc'
+  | 'name-asc'
+  | 'name-desc';

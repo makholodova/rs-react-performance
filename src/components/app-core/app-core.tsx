@@ -1,7 +1,7 @@
 ﻿import styles from './app-core.module.css';
 import { getCo2Resource } from '../../service/co2.service.ts';
 import { CountryList } from '../country-list/country-list.tsx';
-import type { CountryData } from '../../types/country.type.ts';
+import type { CountryData, SortKey } from '../../types/country.type.ts';
 import Modal from '../modal/modal.tsx';
 import { useState } from 'react';
 import { DEFAULT_COLS } from '../../const.ts';
@@ -35,7 +35,6 @@ export default function AppCore() {
     DEFAULT_COLS.filter((k) => availableFields.includes(k))
   );
 
-  //Years
   const set = new Set<number>();
   for (const c of Object.values(data)) {
     for (const row of c.data ?? [])
@@ -47,13 +46,33 @@ export default function AppCore() {
   const [year, setYear] = useState<number>(() => allYears[allYears.length - 1]);
   const handleYearChange = (year: number) => setYear(year);
 
-  //Country
+  const [sort, setSort] = useState<SortKey>('population-desc');
   const [country, setCountry] = useState('');
-
   const q = country.trim().toLowerCase();
-  const visibleCountries = q
+  let visibleCountries = q
     ? countries.filter((c) => c.name.toLowerCase().includes(q))
     : countries;
+
+  visibleCountries = [...visibleCountries].sort((a, b) => {
+    switch (sort) {
+      case 'name-asc':
+        return a.name.localeCompare(b.name);
+      case 'name-desc':
+        return b.name.localeCompare(a.name);
+      case 'population-asc': {
+        const pa = a.series.data?.find((r) => r.year === year)?.population ?? 0;
+        const pb = b.series.data?.find((r) => r.year === year)?.population ?? 0;
+        return pa - pb;
+      }
+      case 'population-desc': {
+        const pa = a.series.data?.find((r) => r.year === year)?.population ?? 0;
+        const pb = b.series.data?.find((r) => r.year === year)?.population ?? 0;
+        return pb - pa;
+      }
+      default:
+        return 0;
+    }
+  });
 
   return (
     <main className={styles.main}>
@@ -63,6 +82,8 @@ export default function AppCore() {
         onYearChange={handleYearChange}
         country={country}
         onCountryChange={setCountry}
+        sort={sort}
+        onSortChange={setSort}
         onOpenModal={() => setModalOpen(true)}
       />
 

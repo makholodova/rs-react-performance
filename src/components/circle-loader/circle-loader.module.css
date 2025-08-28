@@ -1,8 +1,8 @@
 ﻿.circleLoader {
-  width: 40px;
-  height: 40px;
-  border: 4px solid var(--blue);
-  border-top: 4px solid var(--blue-light);
+  width: 80px;
+  height: 80px;
+  border: 8px solid var(--blue);
+  border-top: 8px solid var(--blue-light);
   border-radius: 50%;
   margin: auto;
   animation: spin 1s linear infinite;

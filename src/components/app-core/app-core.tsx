@@ -3,7 +3,7 @@ import { getCo2Resource } from '../../service/co2.service.ts';
 import { CountryList } from '../country-list/country-list.tsx';
 import type { CountryData, SortKey } from '../../types/country.type.ts';
 import Modal from '../modal/modal.tsx';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { DEFAULT_COLS } from '../../const.ts';
 import { Controls } from '../controls/controls.tsx';
 
@@ -44,7 +44,6 @@ export default function AppCore() {
   const allYears = Array.from(set).sort((a, b) => a - b);
 
   const [year, setYear] = useState<number>(() => allYears[allYears.length - 1]);
-  const handleYearChange = (year: number) => setYear(year);
 
   const [sort, setSort] = useState<SortKey>('population-desc');
   const [country, setCountry] = useState('');
@@ -74,6 +73,19 @@ export default function AppCore() {
     }
   });
 
+  const handleOpenModal = useCallback(() => setModalOpen(true), []);
+  const handleCloseModal = useCallback(() => setModalOpen(false), []);
+  const handleYearChange = useCallback((year: number) => setYear(year), []);
+  const handleCountryChange = useCallback(
+    (country: string) => setCountry(country),
+    []
+  );
+  const handleSortChange = useCallback((sort: SortKey) => setSort(sort), []);
+  const handleColumnsChange = useCallback(
+    (columns: string[]) => setSelectedColumns(columns),
+    []
+  );
+
   return (
     <main className={styles.main}>
       <Controls
@@ -81,10 +93,10 @@ export default function AppCore() {
         years={allYears}
         onYearChange={handleYearChange}
         country={country}
-        onCountryChange={setCountry}
+        onCountryChange={handleCountryChange}
         sort={sort}
-        onSortChange={setSort}
-        onOpenModal={() => setModalOpen(true)}
+        onSortChange={handleSortChange}
+        onOpenModal={handleOpenModal}
       />
 
       <CountryList
@@ -97,8 +109,8 @@ export default function AppCore() {
         <Modal
           available={availableFields}
           selected={selectedColumns}
-          onChange={setSelectedColumns}
-          onClose={() => setModalOpen(false)}
+          onChange={handleColumnsChange}
+          onClose={handleCloseModal}
         />
       )}
     </main>
